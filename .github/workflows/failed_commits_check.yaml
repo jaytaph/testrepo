@@ -1,0 +1,30 @@
+name: Check Test File
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check contents of test.txt
+        run: |
+          if grep -q "PASS" test.txt; then
+            echo "Test passed!"
+          elif grep -q "FAIL" test.txt; then
+            echo "Test failed!"
+            exit 1
+          else
+            echo "No result found in test.txt."
+            exit 1
+          fi
+      - run: gh issue comment $ISSUE --body "Thank you for opening this issue!"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.html_url }}
+      - run: echo ${{ jobs }}
