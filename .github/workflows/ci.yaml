@@ -2,8 +2,9 @@ name: Check Test File
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   check:
